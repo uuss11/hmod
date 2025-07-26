@@ -3,10 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <title>🎁 هديتك من رضا</title>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
   <style>
     body {
-      background-color: #111;
-      color: white;
+      background: linear-gradient(135deg, #1a1a1a 0%, #111 100%);
+      color: #fff;
       font-family: 'Tajawal', sans-serif;
       text-align: center;
       display: flex;
@@ -16,17 +17,33 @@
       height: 100vh;
       margin: 0;
       overflow: hidden;
+      position: relative;
     }
 
     #gift {
-      max-width: 250px;
-      margin-bottom: 20px;
+      max-width: 280px;
+      margin-bottom: 30px;
+      transition: all 0.5s ease;
+      filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.4));
+    }
+
+    #gift:hover {
+      transform: scale(1.05);
     }
 
     #message {
-      font-size: 2em;
+      font-size: 2.5em;
+      font-weight: 700;
       opacity: 0;
-      transition: opacity 1s ease;
+      transition: opacity 1s ease, transform 1s ease;
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+      margin-top: 20px;
+      transform: translateY(20px);
+      background: linear-gradient(45deg, gold, #ff8c00, #ff0080);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      padding: 10px 20px;
+      border-radius: 10px;
     }
 
     .confetti {
@@ -36,27 +53,47 @@
       width: 100%;
       height: 100%;
       pointer-events: none;
-      z-index: 0;
+      z-index: -1;
+      overflow: hidden;
     }
 
     .confetti-piece {
       position: absolute;
-      width: 10px;
-      height: 10px;
-      background-color: gold;
-      opacity: 0.8;
+      width: 12px;
+      height: 12px;
+      opacity: 0.9;
       animation: fall 3s linear infinite;
+      border-radius: 50%;
     }
 
     @keyframes fall {
-      to {
+      0% {
+        transform: translateY(-10px) rotate(0deg);
+      }
+      100% {
         transform: translateY(100vh) rotate(720deg);
       }
+    }
+
+    .glow {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at center, transparent 0%, rgba(255,215,0,0.1) 70%);
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 1s ease;
+    }
+
+    .show-glow {
+      opacity: 1;
     }
   </style>
 </head>
 <body>
 
+  <div class="glow" id="glow"></div>
+  
   <img src="gg.gif" alt="هدية" id="gift">
 
   <div id="message">🎊🎉 ربحت خرا 🎉🎊</div>
@@ -67,24 +104,43 @@
     const gift = document.getElementById('gift');
     const message = document.getElementById('message');
     const confetti = document.getElementById('confetti');
+    const glow = document.getElementById('glow');
 
     // بعد 4 ثواني من فتح الصفحة
     setTimeout(() => {
-      gift.style.display = 'none';
-      message.style.opacity = 1;
+      gift.style.transform = 'scale(0.9)';
+      gift.style.opacity = '0';
+      
+      setTimeout(() => {
+        gift.style.display = 'none';
+        message.style.opacity = 1;
+        message.style.transform = 'translateY(0)';
+        glow.classList.add('show-glow');
 
-      // إنشاء القصاصات
-      for (let i = 0; i < 100; i++) {
-        const piece = document.createElement('div');
-        piece.classList.add('confetti-piece');
-        piece.style.left = Math.random() * 100 + '%';
-        piece.style.top = '-10px';
-        piece.style.backgroundColor = ['gold', 'red', 'blue', 'green', 'pink'][Math.floor(Math.random() * 5)];
-        confetti.appendChild(piece);
-      }
-    }, 4000); // تقدر تغير الوقت هنا إذا تريد
+        // إنشاء القصاصات مع تحسينات
+        for (let i = 0; i < 150; i++) {
+          const piece = document.createElement('div');
+          piece.classList.add('confetti-piece');
+          piece.style.left = Math.random() * 100 + '%';
+          piece.style.animationDelay = Math.random() * 3 + 's';
+          piece.style.animationDuration = (2 + Math.random() * 3) + 's';
+          
+          const colors = ['#ffd700', '#ff0000', '#00a8ff', '#00ff00', '#ff00ff', '#ff8c00'];
+          piece.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+          
+          // أشكال مختلفة للقصاصات
+          if (Math.random() > 0.7) {
+            piece.style.borderRadius = '0';
+            piece.style.transform = 'rotate(' + (Math.random() * 360) + 'deg)';
+            piece.style.width = '8px';
+            piece.style.height = '8px';
+          }
+          
+          confetti.appendChild(piece);
+        }
+      }, 500);
+    }, 4000);
   </script>
 
 </body>
 </html>
-  
